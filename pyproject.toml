@@ -1,0 +1,20 @@
+[project]
+name = "bikerentalprediction"
+version = "0.1.0"
+description = "End-to-End data science project"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.43.104",
+    "fastapi>=0.141.1",
+    "joblib>=1.6.0",
+    "lightgbm>=4.7.0",
+    "matplotlib>=3.11.2",
+    "mlflow>=3.16.1",
+    "numpy>=2.4.6",
+    "pandas>=3.0.6",
+    "scikit-learn>=1.9.1",
+    "seaborn>=0.13.2",
+    "ucimlrepo>=0.0.7",
+    "uvicorn>=0.54.0",
+]
