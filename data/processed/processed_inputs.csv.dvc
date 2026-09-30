@@ -1,0 +1,5 @@
+outs:
+- md5: 237ef7e71ea7ef52e341cd0e9e5cf494
+  size: 2197922
+  hash: md5
+  path: processed_inputs.csv
