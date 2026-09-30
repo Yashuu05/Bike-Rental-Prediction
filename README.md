@@ -1,19 +1,10 @@
-# 
+# Souel Bike Rental Prediction
 
-## [PROJECT_TAGLINE]
+## End-to-End Data Science Project
 
-[ONE_LINE_PROJECT_DESCRIPTION]
+An end-to-end data science project invloves Machine Learning, MLOps, DevOps and AWS.
 
-[![Build Status]([CI_STATUS_URL])]([CI_STATUS_URL])
-[![Coverage]([COVERAGE_BADGE_URL])]([COVERAGE_URL])
-[![Docker Image]([DOCKER_BADGE_URL])]([DOCKER_IMAGE_URL])
-[![DVC]([DVC_BADGE_URL])]([DVC_DOCUMENTATION_URL])
-[![MLflow]([MLFLOW_BADGE_URL])]([MLFLOW_TRACKING_URL])
-[![License]([LICENSE_BADGE_URL])]([LICENSE_URL])
-
-![Project Banner]([PROJECT_BANNER_IMAGE_URL])
-
-> [PROJECT_HIGHLIGHT_OR_VALUE_PROPOSITION]
+> Machine Learining | MLOps | AWS | DevOps |
 
 ---
 
@@ -65,31 +56,31 @@
 
 ### Project Name
 
-[PROJECT_NAME]
+Souel Bike Rental Prediction end-to-end data science project
 
 ### Project Type
 
-[CLASSIFICATION_OR_REGRESSION_OR_FORECASTING_OR_RECOMMENDATION_OR_NLP_OR_COMPUTER_VISION_OR_OTHER]
+Regression
 
 ### Domain
 
-[INDUSTRY_OR_BUSINESS_DOMAIN]
+Data Science
 
 ### Project Status
 
-[PROJECT_STATUS_BADGE_OR_STATUS]
-
-### Executive Summary
-
-[EXECUTIVE_SUMMARY_PLACEHOLDER]
+Active (in progress)
 
 ### Primary Outcome
 
-[PRIMARY_OUTCOME_PLACEHOLDER]
+- Learn AWS services (S3 bucket, IAM, Database, EC2)
+- Learn MLOps (dataset versioning, experiment tracking, model registration)
+- Learn Devops (source code versioning, CI/CD pipeline, containerization)
+- Learn ML (model training, model testing, hyperparameter tuning, serialization)
 
 ### Intended Audience
 
-[INTENDED_AUDIENCE_PLACEHOLDER]
+- IT or CSE Students
+- Data Science beginners / learners
 
 ---
 
@@ -97,72 +88,22 @@
 
 ### Primary Objective
 
-[PRIMARY_OBJECTIVE_PLACEHOLDER]
-
-### Secondary Objectives
-
-- [SECONDARY_OBJECTIVE_1]
-- [SECONDARY_OBJECTIVE_2]
-- [SECONDARY_OBJECTIVE_3]
+- Learn to build end-to-end data science projects.
+- Learning and practicing MLOps, Devops and AWS 
+- Integrating AWS services in project.
 
 ### Success Criteria
 
-- [SUCCESS_CRITERION_1]
-- [SUCCESS_CRITERION_2]
-- [SUCCESS_CRITERION_3]
-
----
-
-## Business and Technical Context
-
-### Problem Statement
-
-[PROBLEM_STATEMENT_PLACEHOLDER]
-
-### Business Questions
-
-- [BUSINESS_QUESTION_1]
-- [BUSINESS_QUESTION_2]
-- [BUSINESS_QUESTION_3]
-
-### Technical Questions
-
-- [TECHNICAL_QUESTION_1]
-- [TECHNICAL_QUESTION_2]
-- [TECHNICAL_QUESTION_3]
-
-### Assumptions
-
-- [ASSUMPTION_1]
-- [ASSUMPTION_2]
-- [ASSUMPTION_3]
-
----
-
-## Key Conclusions
-
-### Main Findings
-
-- [KEY_FINDING_1]
-- [KEY_FINDING_2]
-- [KEY_FINDING_3]
-
-### Model Conclusions
-
-[MODEL_CONCLUSIONS_PLACEHOLDER]
-
-### Business Conclusions
-
-[BUSINESS_CONCLUSIONS_PLACEHOLDER]
-
-### Operational Conclusions
-
-[OPERATIONAL_CONCLUSIONS_PLACEHOLDER]
-
-### Evidence and Supporting Links
-
-- [CONCLUSION_EVIDENCE_LINK_1]([URL_1])
-- [CONCLUSION_EVIDENCE_LINK_2]([URL_2])
+- ETL (extract-transform-load)
+- EDA (Exploratory Data Analysis)
+- Data validation
+- Model training
+- Experiment Tracking and model serialization
+- Data version control using dvc
+- containerziation
+- CI / CD
+- Functional APP
+- Database srorage
 
 ---
 
@@ -170,28 +111,46 @@
 
 ### End-to-End Workflow
 
-[END_TO_END_WORKFLOW_SUMMARY_PLACEHOLDER]
-
-### Data-to-Deployment Summary
-
-[DATA_TO_DEPLOYMENT_SUMMARY_PLACEHOLDER]
+```
+Public Dataset
+    |
+ETL Pipeline
+    |
+Data Validation
+    |
+DVC Versioning
+    |
+EDA + Feature Engg
+    |
+Model Trainingg
+    |
+Mlflow tracking 
+    |
+Model Resgitry
+    |
+AWS S3 storage
+    |
+Containerization
+    |
+Dashboard & frontend
+```
 
 ### Technology Summary
 
 | Category | Technology | Purpose | Version |
 |---|---|---|---|
-| Language | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Data Processing | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Machine Learning | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Experiment Tracking | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Data Versioning | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| API | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Dashboard | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Orchestration | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Containerization | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Cloud | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| CI/CD | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
-| Database | [TECHNOLOGY] | [PURPOSE] | [VERSION] |
+| Language | Python | primary language | 3.12 |
+| Data Processing | pandas | to process and transform csv file | 2.3.3 |
+| Machine Learning | scikit-learn, joblib | model training framework and serialization| 1.7.2, 1.5.3 |
+| Experiment Tracking | mlflow | track each model training and evaluation | 3.11.2 |
+| Data Versioning | dvc | to track each version of datasets | 3.67.1 |
+| API | FastAPI | backend and RESTAPI | 0.109.2 |
+| Dashboard | CSS, HTML, JS | frontend | --- |
+| Orchestration | astro cli | Apache Airflow orchestratioin | 1.45.0 |
+| Containerization | docker | packaging project | 29.1.3 |
+| Cloud | AWS | computing and storage | (aws cli) 2.36.49 |
+| CI/CD | Github Actions | building CI / CD pipelines | --- |
+| Database | AWS RDS | prediction and output storage | --- |
 
 ---
 
@@ -199,7 +158,7 @@
 
 ### Architecture Diagram
 
-![System Architecture]([ARCHITECTURE_DIAGRAM_URL])
+![System Architecture](assets/architecture.png)
 
 ### Pipeline Diagram
 
@@ -235,40 +194,105 @@
 ## Repository Structure
 
 ```text
-[PROJECT_NAME]/
-├── [DIRECTORY_OR_FILE]
-├── [DIRECTORY_OR_FILE]
-├── [DIRECTORY_OR_FILE]
+BikeRentalPrediction/
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── cd.yml
+│
+├── dags/
+│   ├── etl_pipeline.py
+│   ├── training_pipeline.py
+│   └── monitoring_pipeline.py
+│
 ├── data/
 │   ├── raw/
-│   ├── interim/
-│   └── processed/
-├── notebooks/
+│   ├── processed/
+|
+│── assets/
+│   ├── architecture.png
+│   ├── docker.png
+|   ├── dvc.png
+|   ├── mlfow.png
+│
 ├── src/
-│   ├── data_collection/
-│   ├── etl/
+│   ├── __init__.py
+│   │
+│   ├── ingestion/
+│   │   ├── __init__.py
+│   │   └── extract.py
+│   │
+│   ├── preprocessing/
+│   │   ├── __init__.py
+│   │   └── transform.py
+│   │
 │   ├── validation/
+│   │   ├── __init__.py
+│   │   └── validate.py
+│   │
 │   ├── features/
+│   │   ├── __init__.py
+│   │   └── engineering.py
+│   │
 │   ├── training/
+│   │   ├── train.py
+│   │   └── evaluate.py
+│   │
 │   ├── inference/
-│   └── utils/
-├── pipelines/
-├── dags/
-├── api/
-├── dashboard/
+│   │   └── predict.py
+│   │
+│   ├── aws/
+│   │   ├── s3.py
+│   │   └── database.py
+│   │
+│   └── monitoring/
+│   |    └── monitor.py
+│   |
+|   |── logger.py
+│   └── excpetion.py
+|   
+│   
 ├── models/
+│   └── my_model.joblib
+│
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   └── 02_model_experiments.ipynb
+│
 ├── tests/
+│   ├── test_ingestion.py
+│   ├── test_validation.py
+│   ├── test_features.py
+│   ├── test_model.py
+│   └── test_api.py
+│
+├── app/
+│   └── templates/
+|   |       ├── index.html
+│   ├── scripts/
+|   |       ├── index.js
+|   ├── styles/
+|   |       ├── index.css
+|   ├── main.py
+|
+|
 ├── configs/
-├── docker/
-├── .dvc/
-├── .github/workflows/
+│   └── model_config.yml
+│
+├── reports/
+│   └── figures/
+│
 ├── Dockerfile
-├── docker-compose.yml
-├── dvc.yaml
-├── params.yaml
 ├── requirements.txt
 ├── pyproject.toml
-└── README.md
+├── dvc.yaml
+├── dvc.lock
+├── .gitignore
+├── .python-version
+├── .dockerignore
+├── .dvcignore
+├── README.md
 ```
 
 ---
@@ -277,29 +301,25 @@
 
 ### Dataset Name
 
-[DATASET_NAME]
+Seoul Bike Sharing Demand
 
 ### Dataset Source
 
-[DATASET_SOURCE_NAME]([DATASET_SOURCE_URL])
+[DATASET_SOURCE_NAME](https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand)
 
 ### Dataset License
 
-[DATASET_LICENSE]
-
-### Dataset Version
-
-[DATASET_VERSION]
+[DATASET_LICENSE](https://creativecommons.org/licenses/by/4.0/legalcode)
 
 ### Data Dictionary
 
-[DATA_DICTIONARY_LINK]([DATA_DICTIONARY_URL])
+[DATA_DICTIONARY_LINK](https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand)
 
 ### Data Dimensions
 
 | Split | Rows | Columns | Date Range | Storage Location |
 |---|---:|---:|---|---|
-| Raw | [VALUE] | [VALUE] | [VALUE] | [S3_OR_LOCAL_PATH] |
+| Raw | 13 | 8760 | [VALUE] | [S3_OR_LOCAL_PATH] |
 | Processed | [VALUE] | [VALUE] | [VALUE] | [S3_OR_LOCAL_PATH] |
 | Train | [VALUE] | [VALUE] | [VALUE] | [S3_OR_LOCAL_PATH] |
 | Validation | [VALUE] | [VALUE] | [VALUE] | [S3_OR_LOCAL_PATH] |
@@ -307,15 +327,9 @@
 
 ### Target Variable
 
-- **Target:** [TARGET_COLUMN]
-- **Target Type:** [TARGET_TYPE]
-- **Target Definition:** [TARGET_DEFINITION]
-
-### Feature Groups
-
-- [FEATURE_GROUP_1]
-- [FEATURE_GROUP_2]
-- [FEATURE_GROUP_3]
+- **Target:** Rented Bike Count
+- **Target Type:** Integer
+- **Target Definition:** Number of bikes rented
 
 ---
 
@@ -323,15 +337,12 @@
 
 ### Collection Method
 
-[COLLECTION_METHOD_PLACEHOLDER]
+using package `ucimlrepo`
 
 ### Source URL
 
-[PUBLIC_DATASET_URL]
+https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand
 
-### Collection Frequency
-
-[COLLECTION_FREQUENCY]
 
 ### Collection Script or Pipeline
 
@@ -1150,19 +1161,19 @@
 
 ### Maintainer
 
-[MAINTAINER_NAME]
+Yash Chillal
 
 ### Email
 
-[MAINTAINER_EMAIL]
+chillalyash2005@gmail.com
 
 ### LinkedIn
 
-[LINKEDIN_PROFILE_URL]
+https://www.linkedin.com/in/yash-chillal-9a069a303/
 
 ### Project Repository
 
-[REPOSITORY_URL]
+https://github.com/Yashuu05/Bike-Rental-Prediction
 
 ### Documentation
 
@@ -1172,31 +1183,40 @@
 
 ## Acknowledgements
 
-- [ACKNOWLEDGEMENT_1]
-- [ACKNOWLEDGEMENT_2]
-- [ACKNOWLEDGEMENT_3]
+ 
+
 
 ### Data Source Attribution
 
-[DATA_SOURCE_ATTRIBUTION_PLACEHOLDER]
+[UC Irvine Machine Learning Repository](https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand)
 
 ### Technology References
 
-- [REFERENCE_1]([URL_1])
-- [REFERENCE_2]([URL_2])
-- [REFERENCE_3]([URL_3])
-
+- [scikit-learn](https://scikit-learn.org/stable/user_guide.html)
+- [pandas](https://pandas.pydata.org/docs/user_guide/index.html#user-guide)
+- [numpy](https://numpy.org/doc/stable/user/index.html#user)
+- [dvc](https://doc.dvc.org/start)
+- [mlflow](https://mlflow.org/docs/latest/ml/getting-started/)
+- [astro](https://www.astronomer.io/docs/cli/v1.45/overview)
+- [docker](https://docs.docker.com/get-started/)
+- [github-actions](https://docs.github.com/en/actions/get-started/quickstart)
+- [uvicorn](https://uvicorn.dev/)
+- [fastapi](https://fastapi.tiangolo.com/fastapi-cli/#fastapi-dev)
+- [aws-s3](https://docs.aws.amazon.com/s3/)
+- [aws-ec2](https://docs.aws.amazon.com/ec2/)
+- [aws-iam](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html)
+- [aws-rds](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html)
 ---
 
 ## Project Metadata
 
 | Field | Value |
 |---|---|
-| Project Name | [PROJECT_NAME] |
-| Version | [PROJECT_VERSION] |
-| Status | [PROJECT_STATUS] |
-| Maintainer | [MAINTAINER_NAME] |
-| Last Updated | [LAST_UPDATED_DATE] |
-| License | [LICENSE_NAME] |
-| Repository | [REPOSITORY_URL] |
+| Project Name | End-to-End Souel Bike Rental Prediction  |
+| Version | 1.0.0 |
+| Status | Active |
+| Maintainer | Yash Chillal |
+| Last Updated | 30/09/2026 |
+| License | --- |
+| Repository | https://github.com/Yashuu05/Bike-Rental-Prediction |
 | Documentation | [DOCUMENTATION_URL] |
