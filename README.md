@@ -327,9 +327,9 @@ Seoul Bike Sharing Demand
 
 ### Target Variable
 
-- **Target:** Rented Bike Count
-- **Target Type:** Integer
-- **Target Definition:** Number of bikes rented
+- **Target:** Functioning Day
+- **Target Type:** binary
+- **Target Definition:** is function or not on specific day
 
 ---
 
