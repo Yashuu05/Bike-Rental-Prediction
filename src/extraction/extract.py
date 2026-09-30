@@ -14,6 +14,7 @@ class Extractor:
     def extract(self) -> tuple:
         # Implement the logic to extract or import the dataset from the official source
         from ucimlrepo import fetch_ucirepo 
+        import pandas as pd
         try:
             # fetch dataset 
             logging.info("Fetching the Seoul Bike Sharing Demand dataset from UCI Machine Learning Repository...")
@@ -22,6 +23,12 @@ class Extractor:
             # data (as pandas dataframes) 
             X = seoul_bike_sharing_demand.data.features 
             y = seoul_bike_sharing_demand.data.targets 
+
+            # concat input features and output targets into a single dataframe
+            logging.info("Merging input features and output targets into a single dataframe...")
+            df_merged = pd.concat([X, y], axis=1)
+            new_y = df_merged['Rented Bike Count']
+            new_X = df_merged.drop(columns=['Rented Bike Count'])
             # metadata 
             print("\nSouel Bike Sharing Demand Dataset Metadata:")
             print(seoul_bike_sharing_demand.metadata) 
@@ -30,7 +37,7 @@ class Extractor:
             print("\nSouel Bike Sharing Demand Dataset Variable Information:")
             print(seoul_bike_sharing_demand.variables) 
 
-            return X, y
+            return new_X, new_y
         
         except Exception as e:
             logging.error("Error occurred while fetching dataset: %s", str(e))
