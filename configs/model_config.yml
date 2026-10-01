@@ -1,0 +1,22 @@
+model_1:
+  algorithm: RandomForestRegressor
+  hyperparameters:
+    n_estimators: 200
+    max_depth: 10
+    random_state: 0
+    verbose: 2
+    n_jobs: -1
+model_2:
+  algorithm: LinearRegression
+  hyperparameters:
+    fit_intercept: True
+    normalize: False
+    copy_X: True
+    n_jobs: -1
+model_3:
+algorithm: LightGBMRegressor
+hyperparameters:
+  num_leaves: 31
+  learning_rate: 0.05
+  n_estimators: 100
+  random_state: 0

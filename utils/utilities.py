@@ -3,7 +3,9 @@ import os
 import sys 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
+from src.logger import logging as log
 import pandas as pd
+
 
 class Utilities:
     @staticmethod
@@ -91,3 +93,28 @@ class Utilities:
             return data
         except Exception as e:
             raise Exception(f"Error reading YAML file from {file_path}: {e}")
+
+    def split_features_and_target(self, X_df: pd.DataFrame, y_df: pd.DataFrame, test_size: float = 0.2, random_state: int = 42):
+        """
+        Split the DataFrame into features and target.
+
+        Args:
+            X_df (pd.DataFrame): The input DataFrame containing features.
+            y_df (pd.DataFrame): The input DataFrame containing the target.
+            test_size (float): The proportion of the dataset to include in the test split.
+            random_state (int): Random seed for reproducibility.
+        Returns:
+            X_train, X_test, y_train, y_test: Split datasets.
+        """
+        from sklearn.model_selection import train_test_split
+        try:
+            log.info(f"Splitting dataset into train and test sets with test size {test_size} and random state {random_state}...")  
+            X_train, X_test, y_train, y_test = train_test_split(X_df, y_df, test_size=test_size, random_state=random_state, shuffle=True)
+            return X_train, X_test, y_train, y_test
+        
+        except Exception as e:
+            raise Exception(f"Error splitting features and target: {e}")
+
+    def split_dataset(self, X_df: pd.DataFrame, y_df: pd.DataFrame, test_size: float = 0.2, random_state: int = 42):
+        """Alias for split_features_and_target."""
+        return self.split_features_and_target(X_df, y_df, test_size=test_size, random_state=random_state)

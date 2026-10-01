@@ -16,3 +16,5 @@ class Paths:
     PREPROCESSOR_SAVE_FILE = os.path.join(project_root, "models", "preprocessor.joblib")
     MODEL_SAVE_PATH = os.path.join(project_root, "models", "model.joblib")
     DATA_SCHEMA_FILE = os.path.join(project_root, "src", "validation", "data_schema.yml")
+    EVALUATION_REPORT_FILE = os.path.join(project_root, "reports", "evaluation_report.yaml")
+    MODEL_CONFIG_FILE = os.path.join(project_root, "configs", "model_config.yaml")
