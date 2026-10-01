@@ -74,3 +74,20 @@ class Utilities:
             joblib.dump(obj, file_path)
         except Exception as e:
             raise Exception(f"Error saving object to {file_path}: {e}")
+
+    def read_yaml_file(self, file_path: str) -> dict:
+        """
+        Read a YAML file and return its contents as a dictionary.
+
+        Args:
+            file_path (str): The path of the YAML file to read.
+        Returns:
+            dict: The contents of the YAML file as a dictionary.
+        """
+        import yaml
+        try:
+            with open(file_path, 'r') as file:
+                data = yaml.safe_load(file)
+            return data
+        except Exception as e:
+            raise Exception(f"Error reading YAML file from {file_path}: {e}")

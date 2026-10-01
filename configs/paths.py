@@ -15,3 +15,4 @@ class Paths:
     PROCESSED_OUTPUT_FILE = os.path.join(PROCESSED_DATA_FILE, "processed_output.csv")
     PREPROCESSOR_SAVE_FILE = os.path.join(project_root, "models", "preprocessor.joblib")
     MODEL_SAVE_PATH = os.path.join(project_root, "models", "model.joblib")
+    DATA_SCHEMA_FILE = os.path.join(project_root, "src", "validation", "data_schema.yml")

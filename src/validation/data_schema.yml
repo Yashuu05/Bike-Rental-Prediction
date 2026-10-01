@@ -1,0 +1,28 @@
+columns_data_types:
+  Date: str
+  Hour: int64
+  Temperature: float64
+  Humidity: int64
+  Wind Speed: float64
+  Visibility: int64
+  Dew Point Temperature: float64
+  Solar Radiation: float64
+  Rainfall: int64
+  Snowfall: int64
+  Seasons: str
+  Holiday: str
+  Functioning Day: str
+input_features:
+  Date
+  Hour
+  Temperature
+  Humidity
+  Wind Speed
+  Visibility
+  Dew Point Temperature
+  Solar Radiation
+  Rainfall
+  Snowfall
+  Seasons
+  Holiday
+  Functioning Day
