@@ -96,13 +96,7 @@ class HyperparameterTuner:
             metrics = self.model_evaluator.evaluate_model(best_model, X_test, y_test)
             log.info(f"Tuned model evaluation metrics (MSE, MAE, R2): {metrics}")
             print(f"Tuned model evaluation metrics (MSE, MAE, R2): {metrics}")
-
-            # Save the best model object
-            os.makedirs(os.path.dirname(Paths.MODEL_SAVE_PATH), exist_ok=True)
-            self.utilities.save_model_object(best_model, Paths.MODEL_SAVE_PATH)
-            log.info(f"Best tuned model saved to {Paths.MODEL_SAVE_PATH} successfully.")
-            print(f"Best tuned model saved to {Paths.MODEL_SAVE_PATH} successfully.")
-
+            
             return best_model
 
         except Exception as e:
@@ -127,4 +121,4 @@ if __name__ == "__main__":
         print("Hyperparameter tuning pipeline completed successfully.")
     else:
         print("Dataset files not found. Run preprocessing first.")
-
+
