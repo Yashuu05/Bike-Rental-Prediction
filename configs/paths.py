@@ -18,3 +18,4 @@ class Paths:
     DATA_SCHEMA_FILE = os.path.join(project_root, "src", "validation", "data_schema.yml")
     EVALUATION_REPORT_FILE = os.path.join(project_root, "reports", "evaluation_report.yaml")
     MODEL_CONFIG_FILE = os.path.join(project_root, "configs", "model_config.yaml")
+    SAMPLE_DATASET_PATH = os.path.join(project_root,DATA_DIR,"sample","sample_dataset.csv")
