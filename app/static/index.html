@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bike Rental Demand Prediction Engine</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header Card -->
+    <header class="header">
+      <div class="brand-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="5.5" cy="17.5" r="3.5"/>
+          <circle cx="18.5" cy="17.5" r="3.5"/>
+          <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h4"/>
+        </svg>
+        Predict Bike Demand
+      </div>
+      <h1>Bike Rental Demand Predictor</h1>
+      <p>Enter weather, environmental, and temporal parameters to estimate hourly bike sharing demand using our trained ML pipeline.</p>
+
+      <!-- Presets Bar -->
+      <div class="presets-container">
+        <span class="presets-label">Quick Presets:</span>
+        <button type="button" class="preset-btn" data-preset="summerPeak">
+          ☀️ Summer Peak
+        </button>
+        <button type="button" class="preset-btn" data-preset="rainyAutumn">
+          🌧️ Rainy Autumn
+        </button>
+        <button type="button" class="preset-btn" data-preset="freezingWinter">
+          ❄️ Winter Holiday (Closed)
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <div class="main-grid">
+      
+      <!-- Input Parameters Form -->
+      <main class="glass-card">
+        <h2 class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          Input Feature Parameters
+        </h2>
+
+        <form id="predictionForm" novalidate>
+          <div class="form-grid">
+
+            <!-- Temporal Parameters -->
+            <div class="field-group">
+              <label class="field-label" for="Date">
+                Date
+                <span class="unit-badge">YYYY-MM-DD</span>
+              </label>
+              <input type="date" id="Date" class="input-control" required />
+              <span class="field-error">Please select a valid date</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Hour">
+                Hour of Day
+                <span class="unit-badge">0-23 hrs</span>
+              </label>
+              <input type="number" id="Hour" class="input-control" min="0" max="23" step="1" value="17" required />
+              <span class="field-error">Enter hour between 0 and 23</span>
+            </div>
+
+            <!-- Weather Parameters -->
+            <div class="field-group">
+              <label class="field-label" for="Temperature">
+                Temperature
+                <span class="unit-badge">°C</span>
+              </label>
+              <input type="number" id="Temperature" class="input-control" step="0.1" value="22.5" required />
+              <span class="field-error">Enter a valid numerical temperature</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Humidity">
+                Humidity
+                <span class="unit-badge">0-100%</span>
+              </label>
+              <input type="number" id="Humidity" class="input-control" min="0" max="100" step="1" value="50" required />
+              <span class="field-error">Enter humidity between 0 and 100%</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Wind speed">
+                Wind Speed
+                <span class="unit-badge">m/s</span>
+              </label>
+              <input type="number" id="Wind speed" class="input-control" min="0" step="0.1" value="2.0" required />
+              <span class="field-error">Enter valid non-negative wind speed</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Visibility">
+                Visibility
+                <span class="unit-badge">10m</span>
+              </label>
+              <input type="number" id="Visibility" class="input-control" min="0" step="10" value="1800" required />
+              <span class="field-error">Enter valid visibility value</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Dew point temperature">
+                Dew Point Temp
+                <span class="unit-badge">°C</span>
+              </label>
+              <input type="number" id="Dew point temperature" class="input-control" step="0.1" value="12.0" required />
+              <span class="field-error">Enter valid dew point temperature</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Solar Radiation">
+                Solar Radiation
+                <span class="unit-badge">MJ/m²</span>
+              </label>
+              <input type="number" id="Solar Radiation" class="input-control" min="0" step="0.01" value="1.50" required />
+              <span class="field-error">Enter valid solar radiation</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Rainfall">
+                Rainfall
+                <span class="unit-badge">mm</span>
+              </label>
+              <input type="number" id="Rainfall" class="input-control" min="0" step="0.1" value="0.0" required />
+              <span class="field-error">Enter valid rainfall in mm</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Snowfall">
+                Snowfall
+                <span class="unit-badge">cm</span>
+              </label>
+              <input type="number" id="Snowfall" class="input-control" min="0" step="0.1" value="0.0" required />
+              <span class="field-error">Enter valid snowfall in cm</span>
+            </div>
+
+            <!-- Categorical Parameters -->
+            <div class="field-group">
+              <label class="field-label" for="Seasons">
+                Season
+              </label>
+              <select id="Seasons" class="input-control" required>
+                <option value="Summer">Summer</option>
+                <option value="Spring">Spring</option>
+                <option value="Autumn">Autumn</option>
+                <option value="Winter">Winter</option>
+              </select>
+              <span class="field-error">Select a valid season</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="Holiday">
+                Holiday Status
+              </label>
+              <select id="Holiday" class="input-control" required>
+                <option value="No Holiday">No Holiday</option>
+                <option value="Holiday">Holiday</option>
+              </select>
+              <span class="field-error">Select holiday status</span>
+            </div>
+
+            <div class="field-group full-width">
+              <label class="field-label" for="Functioning Day">
+                Facility Operational Status (Functioning Day)
+              </label>
+              <select id="Functioning Day" class="input-control" required>
+                <option value="Yes">Yes (Facility Open)</option>
+                <option value="No">No (Facility Closed)</option>
+              </select>
+              <span class="field-error">Select functioning status</span>
+            </div>
+
+          </div>
+
+          <button type="submit" id="submitBtn" class="submit-btn">
+            <span class="spinner" id="btnSpinner"></span>
+            <span id="btnText">Predict Bike Rental Demand</span>
+          </button>
+        </form>
+      </main>
+
+      <!-- Prediction Results Panel -->
+      <aside class="glass-card results-card">
+        <h2 class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+          Predicted Demand Output
+        </h2>
+
+        <!-- Placeholder state -->
+        <div id="resultsPlaceholder" class="results-placeholder">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          <p>Fill out the parameters on the left and click <strong>Predict Bike Rental Demand</strong> to view predictions.</p>
+        </div>
+
+        <!-- Active Result state -->
+        <div id="resultsContent" class="results-content">
+          <div class="result-main">
+            <div class="result-unit">Estimated Hourly Rentals</div>
+            <div id="resultCount" class="result-number">0</div>
+            <div id="demandBadge" class="demand-badge">Moderate Demand</div>
+            <div id="rawPred" style="font-size:0.75rem; color: var(--text-dim); margin-top:0.75rem;"></div>
+          </div>
+
+          <div class="insights-list">
+            <div class="insight-item">
+              <span class="label">Target Variable</span>
+              <span class="value">Rented Bike Count</span>
+            </div>
+            <div class="insight-item">
+              <span class="label">Selected Season</span>
+              <span id="resultSeason" class="value">Summer</span>
+            </div>
+            <div class="insight-item">
+              <span class="label">Temperature</span>
+              <span id="resultTemp" class="value">22.5 °C</span>
+            </div>
+            <div class="insight-item">
+              <span class="label">Hour of Day</span>
+              <span id="resultHour" class="value">17:00 hrs</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Bike Rental Prediction Machine Learning Application • Built with FastAPI & Vanilla HTML/CSS/JS</p>
+    </footer>
+
+  </div>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
