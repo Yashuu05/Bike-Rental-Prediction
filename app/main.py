@@ -7,13 +7,16 @@ if project_root not in sys.path:
     sys.path.append(project_root)
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from sqlalchemy.orm import Session
 
 from app.schemas import BikePredictionInput, BikePredictionResponse
+from app.database import engine, get_db, Base
+from app.models import PredictionRecord
 from src.prediction.predict import PredictionPipeline
 from src.logger import logging as log
 from configs.paths import Paths
@@ -34,17 +37,25 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         log.error(f"Failed to load model resources during app startup: {e}")
         raise RuntimeError(f"Could not load ML model or preprocessor: {e}")
+
+    # Attempt to initialize MySQL database tables if connected
+    if engine is not None:
+        try:
+            Base.metadata.create_all(bind=engine)
+            log.info("Successfully connected to MySQL database and initialized tables.")
+        except Exception as e:
+            log.warning(f"Database table initialization skipped (DB may not be reachable yet): {e}")
+
     yield
     log.info("Shutting down FastAPI application.")
 
 app = FastAPI(
-    title="Bike Rental Prediction API",
-    description="REST API for predicting hourly bike rental demand using trained ML model.",
-    version="1.0.0",
+    title="Bike Rental Prediction API with AWS RDS MySQL Integration",
+    description="REST API for predicting hourly bike rental demand with database record persistence.",
+    version="1.1.0",
     lifespan=lifespan
 )
 
-# Enable CORS for external frontend flexibility
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -53,7 +64,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 os.makedirs(static_dir, exist_ok=True)
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
@@ -70,19 +80,27 @@ async def serve_home():
 
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint to verify API and model status."""
-    is_ready = model is not None and preprocessor is not None
+    """Health check endpoint to verify API, model, and database connection status."""
+    db_connected = False
+    if engine is not None:
+        try:
+            with engine.connect() as conn:
+                db_connected = True
+        except Exception:
+            db_connected = False
+
     return {
-        "status": "healthy" if is_ready else "unhealthy",
+        "status": "healthy" if (model is not None and preprocessor is not None) else "unhealthy",
         "model_loaded": model is not None,
-        "preprocessor_loaded": preprocessor is not None
+        "preprocessor_loaded": preprocessor is not None,
+        "database_connected": db_connected
     }
 
 
 @app.post("/predict", response_model=BikePredictionResponse)
-async def predict_bike_rentals(input_data: BikePredictionInput):
+async def predict_bike_rentals(input_data: BikePredictionInput, db: Session = Depends(get_db)):
     """
-    Predicts the hourly rented bike count based on meteorological and calendar inputs.
+    Predicts hourly bike rentals and persists the prediction record to MySQL database.
     """
     global prediction_pipeline, model, preprocessor
 
@@ -93,7 +111,6 @@ async def predict_bike_rentals(input_data: BikePredictionInput):
         )
 
     try:
-        # Convert input payload into DataFrame matching raw dataset feature column names
         raw_data = {
             "Date": input_data.Date,
             "Hour": input_data.Hour,
@@ -112,19 +129,14 @@ async def predict_bike_rentals(input_data: BikePredictionInput):
 
         input_df = pd.DataFrame([raw_data])
 
-        # Preprocess input using PredictionPipeline logic
         processed_df, _ = prediction_pipeline.apply_preprocessing(
             preprocessor=preprocessor,
             sample_data=input_df
         )
 
-        # Generate prediction
         raw_pred = float(model.predict(processed_df)[0])
-        
-        # Ensure count is non-negative integer
         predicted_count = max(0, int(round(raw_pred)))
 
-        # Determine demand level category
         if input_data.Functioning_Day == "No":
             demand_level = "No Operation (Facility Closed)"
         elif predicted_count == 0:
@@ -138,7 +150,34 @@ async def predict_bike_rentals(input_data: BikePredictionInput):
         else:
             demand_level = "Peak Demand"
 
-        log.info(f"Successfully processed prediction request: {predicted_count} bikes ({demand_level})")
+        # Save to MySQL Database if session is available
+        if db is not None:
+            try:
+                record = PredictionRecord(
+                    date_val=input_data.Date,
+                    hour=input_data.Hour,
+                    temperature=input_data.Temperature,
+                    humidity=input_data.Humidity,
+                    wind_speed=input_data.Wind_speed,
+                    visibility=input_data.Visibility,
+                    dew_point_temp=input_data.Dew_point_temperature,
+                    solar_radiation=input_data.Solar_Radiation,
+                    rainfall=input_data.Rainfall,
+                    snowfall=input_data.Snowfall,
+                    seasons=input_data.Seasons,
+                    holiday=input_data.Holiday,
+                    functioning_day=input_data.Functioning_Day,
+                    predicted_count=predicted_count,
+                    raw_prediction=round(raw_pred, 2),
+                    demand_level=demand_level
+                )
+                db.add(record)
+                db.commit()
+                db.refresh(record)
+                log.info(f"Prediction saved to MySQL database with Record ID #{record.id}")
+            except Exception as db_err:
+                log.warning(f"Could not save prediction to database: {db_err}")
+                db.rollback()
 
         return BikePredictionResponse(
             status="success",
@@ -156,6 +195,19 @@ async def predict_bike_rentals(input_data: BikePredictionInput):
         )
 
 
+@app.get("/api/history")
+async def get_prediction_history(limit: int = 10, db: Session = Depends(get_db)):
+    """Retrieves recent prediction history from MySQL database."""
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database connection is not available.")
+    
+    records = db.query(PredictionRecord).order_by(PredictionRecord.id.desc()).limit(limit).all()
+    return {
+        "count": len(records),
+        "history": [record.to_dict() for record in records]
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8080, reload=True)
