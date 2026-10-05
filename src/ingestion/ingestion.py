@@ -36,6 +36,24 @@ class Ingestion:
             log.error("Error occurred during ingestion to S3: %s", str(e))
             raise CustomException(e, sys)
 
+    def read_from_s3(self, object_name: str, download_path: None | str = None):
+        """
+        Reads or downloads a specific dataset/file from S3 bucket.
+
+        Args:
+            :param object_name: S3 object key (e.g., 'datasets/preprocessed/input_features.csv')
+            :param download_path: Optional local destination file path.
+        Returns:
+            :return: Path to downloaded file if download_path is provided, or raw bytes content if download_path is None.
+        """
+        try:
+            log.info("Starting file retrieval from S3 bucket...")
+            return self.aws_s3.read_bucket_files(object_name=object_name, download_path=download_path)
+        except Exception as e:
+            log.error("Error occurred during reading from S3: %s", str(e))
+            raise CustomException(e, sys)
+
+
 
 if __name__ == "__main__":
     print("Starting ingestion process...")

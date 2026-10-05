@@ -63,3 +63,37 @@ class AwsS3:
         except Exception as e:
             log.error(f"Error occured while uploading to s3: {str(e)}")
             raise CustomException(e, sys)
+
+    def read_bucket_files(self, object_name: str, bucket_name: None | str = None, download_path: None | str = None):
+        """
+        Reads or downloads a specific file from an AWS S3 bucket.
+
+        Args:
+            :param object_name: S3 object key (e.g., 'datasets/preprocessed/input_features.csv')
+            :param bucket_name: Name of the target S3 bucket. If None, reads from environment variables.
+            :param download_path: Optional local file path to save the downloaded file.
+
+        Returns:
+            :return: If download_path is provided, returns the download_path string.
+                     If download_path is None, returns raw bytes of the file content.
+        """
+        try:
+            if bucket_name is None:
+                bucket_name = self.read_bucket_name()
+
+            s3_client = boto3.client('s3')
+            log.info(f"Reading object '{object_name}' from s3://{bucket_name}...")
+
+            if download_path:
+                os.makedirs(os.path.dirname(download_path), exist_ok=True)
+                s3_client.download_file(Bucket=bucket_name, Key=object_name, Filename=download_path)
+                log.info(f"File successfully downloaded from s3://{bucket_name}/{object_name} to {download_path}")
+                return download_path
+            else:
+                response = s3_client.get_object(Bucket=bucket_name, Key=object_name)
+                log.info(f"File successfully read from s3://{bucket_name}/{object_name}")
+                return response['Body'].read()
+
+        except Exception as e:
+            log.error(f"Error occurred while reading file from S3: {str(e)}")
+            raise CustomException(e, sys)
