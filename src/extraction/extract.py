@@ -6,12 +6,12 @@ sys.path.append(project_root)
 from src.logger import logging
 from src.exception import CustomException
 from configs.paths import Paths
-
+import pandas as pd
 class Extractor:
     def __init__(self):
         pass
 
-    def extract(self) -> tuple:
+    def extract_dataset(self) -> tuple:
         # Implement the logic to extract or import the dataset from the official source
         from ucimlrepo import fetch_ucirepo 
         import pandas as pd
@@ -30,8 +30,8 @@ class Extractor:
             new_y = df_merged['Rented Bike Count']
             new_X = df_merged.drop(columns=['Rented Bike Count'])
             # metadata 
-            print("\nSouel Bike Sharing Demand Dataset Metadata:")
-            print(seoul_bike_sharing_demand.metadata) 
+            #print("\nSeoul Bike Sharing Demand Dataset Metadata:")
+            #print(seoul_bike_sharing_demand.metadata) 
               
             # variable information 
             print("\nSouel Bike Sharing Demand Dataset Variable Information:")
@@ -44,9 +44,17 @@ class Extractor:
             raise CustomException(e, sys)
   
 
-    def extract_and_save(self):
+    def extract_and_save(self,X:pd.DataFrame,y:pd.DataFrame):
+        """
+        Saves raw extracted dataset to local files
+        Args:
+            - X: input features
+            - y: output labels
+        Returns:
+            - None
+        """
         try:
-            X, y = self.extract()
+            X, y = self.extract_dataset()
             # Save the extracted data to CSV files
             logging.info("Saving extracted data to CSV files...")
             os.makedirs(Paths.DATA_DIR, exist_ok=True)
