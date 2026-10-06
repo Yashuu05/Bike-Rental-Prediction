@@ -32,6 +32,27 @@ class PredictionPipeline:
         self.preprocessor_path = preprocessor_path
         self.data_path = data_path
 
+    def _download_from_s3_if_needed(self):
+        """Attempts to download model artifacts from AWS S3 if missing locally."""
+        try:
+            from src.aws.s3 import AwsS3
+            aws = AwsS3()
+            bucket_name = aws.read_bucket_name()
+            if not bucket_name:
+                return
+
+            if not os.path.exists(self.model_path):
+                log.info(f"Model file missing locally. Attempting download from S3 (bucket: {bucket_name})...")
+                os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
+                aws.read_bucket_files(object_name="models/best_model.joblib", bucket_name=bucket_name, download_path=self.model_path)
+
+            if not os.path.exists(self.preprocessor_path):
+                log.info(f"Preprocessor file missing locally. Attempting download from S3 (bucket: {bucket_name})...")
+                os.makedirs(os.path.dirname(self.preprocessor_path), exist_ok=True)
+                aws.read_bucket_files(object_name="models/preprocessor.joblib", bucket_name=bucket_name, download_path=self.preprocessor_path)
+        except Exception as e:
+            log.warning(f"Could not auto-download model resources from S3: {e}")
+
     def read_resources(self) -> tuple:
         """
         reads resources such as saved model, saved preprocessor and sample dataset
@@ -42,25 +63,31 @@ class PredictionPipeline:
         Returns:
             - model: saved and trained model
             - preprocessor: saved preprocessor during data transformation
-            - df: raw sample dataset
+            - df: raw sample dataset (or None if unavailable)
         """
 
         try:
+            # Fallback to AWS S3 if model files are not present locally
+            if not os.path.exists(self.model_path) or not os.path.exists(self.preprocessor_path):
+                self._download_from_s3_if_needed()
+
             if not os.path.exists(self.model_path):
                 raise FileNotFoundError(f"Model file not found at {self.model_path}")
             if not os.path.exists(self.preprocessor_path):
                 raise FileNotFoundError(f"Preprocessor file not found at {self.preprocessor_path}")
-            if not os.path.exists(self.data_path):
-                raise FileNotFoundError(f"Sample dataset file not found at {self.data_path}")
 
             log.info(f"Loading Model from {self.model_path} and Preprocessor from {self.preprocessor_path}...")
             model = self.utils.load_ml_model(model_path=self.model_path)
             preprocessor = self.utils.load_ml_model(model_path=self.preprocessor_path)
             log.info("Read Model and Preprocessor successfully.")
 
-            log.info(f"Reading sample dataset from {self.data_path}...")
-            df = self.utils.read_dataset(file_path=self.data_path)
-            log.info(f"Successfully read sample data with shape {df.shape}")
+            df = None
+            if os.path.exists(self.data_path):
+                log.info(f"Reading sample dataset from {self.data_path}...")
+                df = self.utils.read_dataset(file_path=self.data_path)
+                log.info(f"Successfully read sample data with shape {df.shape}")
+            else:
+                log.warning(f"Sample dataset file not found at {self.data_path}. Continuing without sample dataset.")
 
             return model, preprocessor, df
 

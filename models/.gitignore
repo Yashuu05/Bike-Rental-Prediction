@@ -1,2 +1,3 @@
-/preprocessor.joblib
-/model.joblib
+# Tracked in git for cloud deployment (e.g. Render, AWS, Docker)
+# /preprocessor.joblib
+# /model.joblib
