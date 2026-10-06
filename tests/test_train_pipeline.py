@@ -12,10 +12,10 @@ from configs.paths import Paths
 
 class TestTrainingPipeline:
 
-    def __init__(self):
+    def setup_method(self):
         self.pipeline = TrainingPipeline()
 
-    def test_run_pipeline(self, X, y, models_dict: dict):
+    def execute_pipeline(self, X, y, models_dict: dict):
         """
         Test the complete training pipeline.
 
@@ -50,5 +50,5 @@ if __name__ == "__main__":
 
     # 3. run the training pipeline test
     test_pipeline = TestTrainingPipeline()
-    test_pipeline.test_run_pipeline(X, y, models_dict)
+    test_pipeline.execute_pipeline(X, y, models_dict)
     log.info("Training pipeline test completed successfully.")

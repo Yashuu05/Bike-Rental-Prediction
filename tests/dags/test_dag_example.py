@@ -4,6 +4,9 @@ import os
 import logging
 from contextlib import contextmanager
 import pytest
+
+# Skip this test gracefully if airflow is not installed in the environment
+pytest.importorskip("airflow")
 from airflow.models import DagBag
 
 
