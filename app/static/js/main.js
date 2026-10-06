@@ -17,6 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultTempEl = document.getElementById('resultTemp');
   const resultHourEl = document.getElementById('resultHour');
 
+  // Theme Switch Logic
+  const themeSwitchBtn = document.getElementById('themeSwitchBtn');
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  
+  if (typeof window.applyAppTheme === 'function') {
+    window.applyAppTheme(currentTheme);
+  }
+
+  if (themeSwitchBtn) {
+    themeSwitchBtn.addEventListener('click', () => {
+      if (typeof window.toggleAppTheme === 'function') {
+        window.toggleAppTheme();
+      }
+    });
+  }
+
   // Preset configuration datasets
   const presets = {
     summerPeak: {

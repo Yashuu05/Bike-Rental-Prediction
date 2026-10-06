@@ -4,9 +4,205 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bike Rental Demand Prediction Engine</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+  <link rel="stylesheet" href="/static/css/style.css?v=2.2" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* Critical Inline Theme Tokens & Self-Contained Switch Styles */
+    :root {
+      --bg-dark: #000000;
+      --bg-card: rgba(16, 24, 40, 0.75);
+      --text-main: #ffffff;
+      --text-muted: #cbd5e1;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --primary-accent: #38bdf8;
+    }
+    html[data-theme="light"],
+    body[data-theme="light"],
+    [data-theme="light"] {
+      --bg-dark: #ffffff !important;
+      --bg-card: rgba(255, 255, 255, 0.95) !important;
+      --text-main: #000000 !important;
+      --text-muted: #334155 !important;
+      --text-dim: #64748b !important;
+      --input-bg: #ffffff !important;
+      --input-border: rgba(0, 0, 0, 0.22) !important;
+      --border-color: rgba(0, 0, 0, 0.12) !important;
+      background-color: #f8fafc !important;
+      color: #000000 !important;
+    }
+    [data-theme="light"] body {
+      background-color: #f8fafc !important;
+      color: #000000 !important;
+    }
+    [data-theme="light"] .glass-card,
+    [data-theme="light"] .header {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
+    }
+    [data-theme="light"] .input-control {
+      background: #ffffff !important;
+      color: #000000 !important;
+      border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+    [data-theme="light"] .input-control option {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+    [data-theme="light"] .result-main {
+      background: #f1f5f9 !important;
+      border-color: rgba(56, 189, 248, 0.3) !important;
+    }
+    [data-theme="light"] .insight-item {
+      background: #f8fafc !important;
+      border-color: rgba(0, 0, 0, 0.08) !important;
+    }
+    [data-theme="light"] .preset-btn {
+      background: rgba(0, 0, 0, 0.05) !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      color: #334155 !important;
+    }
+    [data-theme="light"] .unit-badge {
+      background: rgba(0, 0, 0, 0.06) !important;
+      color: #64748b !important;
+    }
+    [data-theme="light"] .field-label {
+      color: #334155 !important;
+    }
+
+    /* Switch Component */
+    .theme-toggle-container {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1000;
+    }
+    .theme-label-text {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      user-select: none;
+    }
+    .theme-switch-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 56px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      cursor: pointer;
+      padding: 2px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    [data-theme="light"] .theme-switch-btn {
+      background: #38bdf8;
+      border-color: #0284c7;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+    .switch-thumb {
+      width: 22px;
+      height: 22px;
+      background: #38bdf8;
+      border-radius: 50%;
+      position: absolute;
+      left: 3px;
+      top: 2px;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      z-index: 2;
+    }
+    [data-theme="light"] .switch-thumb {
+      transform: translateX(26px);
+      background: #ffffff;
+    }
+    .switch-icon-wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .switch-icon-sun {
+      left: 5px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .switch-icon-moon {
+      right: 5px;
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+    [data-theme="light"] .switch-icon-sun {
+      opacity: 1;
+    }
+    [data-theme="light"] .switch-icon-moon {
+      opacity: 0;
+    }
+    .switch-svg {
+      width: 14px !important;
+      height: 14px !important;
+      max-width: 14px !important;
+      max-height: 14px !important;
+      min-width: 14px !important;
+      min-height: 14px !important;
+      display: block !important;
+    }
+    @media (max-width: 600px) {
+      .theme-toggle-container {
+        top: 0.75rem;
+        right: 0.75rem;
+      }
+    }
+  </style>
+  <script>
+    function applyAppTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      if (document.body) {
+        document.body.setAttribute('data-theme', theme);
+      }
+      localStorage.setItem('theme', theme);
+      const label = document.getElementById('themeStatusLabel');
+      const btn = document.getElementById('themeSwitchBtn');
+      if (label) {
+        label.textContent = theme === 'light' ? 'Light' : 'Dark';
+      }
+      if (btn) {
+        btn.setAttribute('aria-checked', theme === 'light' ? 'true' : 'false');
+      }
+    }
+
+    function toggleAppTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'dark';
+      const nextTheme = current === 'dark' ? 'light' : 'dark';
+      applyAppTheme(nextTheme);
+    }
+
+    // Initialize immediately
+    (function() {
+      const saved = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
 </head>
 <body>
 
@@ -14,6 +210,25 @@
     
     <!-- Header Card -->
     <header class="header">
+      <!-- Theme Switch in Top-Right Corner -->
+      <div class="theme-toggle-container" title="Toggle Light / Dark Theme">
+        <span class="theme-label-text" id="themeStatusLabel">Dark</span>
+        <button type="button" id="themeSwitchBtn" class="theme-switch-btn" role="switch" aria-checked="false" aria-label="Toggle Light and Dark Theme" onclick="toggleAppTheme()">
+          <span class="switch-icon-wrapper switch-icon-sun">
+            <svg class="switch-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;max-width:14px;max-height:14px;display:block;">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+          </span>
+          <span class="switch-icon-wrapper switch-icon-moon">
+            <svg class="switch-svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="none" style="width:14px;height:14px;max-width:14px;max-height:14px;display:block;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+          <span class="switch-thumb"></span>
+        </button>
+      </div>
+
       <div class="brand-badge">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="5.5" cy="17.5" r="3.5"/>
@@ -250,6 +465,6 @@
 
   </div>
 
-  <script src="/static/js/main.js"></script>
+  <script src="/static/js/main.js?v=2.2"></script>
 </body>
 </html>
