@@ -22,9 +22,9 @@ from src.logger import logging as log
 from configs.paths import Paths
 
 # Global variables for model and preprocessor
-prediction_pipeline = None
-model = None
-preprocessor = None
+#prediction_pipeline = None
+#model = None
+#preprocessor = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
