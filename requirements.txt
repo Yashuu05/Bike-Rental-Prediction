@@ -1,4 +1,4 @@
-fastapi>=0.115.0
+fastapi[standard]>=0.115.0
 uvicorn>=0.30.0
 pydantic>=2.9.0
 sqlalchemy>=2.0.0
@@ -16,7 +16,4 @@ numpy
 matplotlib
 ipykernel
 imbalanced-learn
-cryptography
-fastapi[standard]
-dotenv
 ucimlrepo
