@@ -26,3 +26,7 @@ dependencies = [
     "ucimlrepo>=0.0.7",
     "uvicorn>=0.54.0",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

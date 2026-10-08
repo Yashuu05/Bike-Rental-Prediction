@@ -22,9 +22,9 @@ from src.logger import logging as log
 from configs.paths import Paths
 
 # Global variables for model and preprocessor
-#prediction_pipeline = None
-#model = None
-#preprocessor = None
+prediction_pipeline = None
+model = None
+preprocessor = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -102,8 +102,6 @@ async def predict_bike_rentals(input_data: BikePredictionInput, db: Session = De
     """
     Predicts hourly bike rentals and persists the prediction record to MySQL database.
     """
-    global prediction_pipeline, model, preprocessor
-
     if model is None or preprocessor is None:
         raise HTTPException(
             status_code=503,
